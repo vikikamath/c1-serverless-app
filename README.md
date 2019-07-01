@@ -4,7 +4,15 @@ Serverless Full Stack JS Starter with essential defaults.
 
 ## Prequisites:
 
-`npm 5+`, `node 8+` and `nvm` for managing different versions of node.
+Node specific installation
+
+- `npm 5+`, `node 8+` and `nvm` for managing different versions of node.
+
+SAM specific installation
+
+- `Docker`
+- `AWS SAM CLI`
+
 
 ## Installation
 
