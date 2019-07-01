@@ -14,7 +14,7 @@ Resources:
       FunctionName: GetPostsFunction
       Runtime: nodejs8.10
       Handler: list.handler
-      CodeUri: ./packages/api/posts/
+      CodeUri: ./packages/api/dist/posts/
       Events:
         GetPostsApi:
           Type: Api
@@ -30,7 +30,7 @@ Resources:
       FunctionName: GetPostByIdFunction
       Runtime: nodejs8.10
       Handler: byId.handler
-      CodeUri: ./packages/api/posts/
+      CodeUri: ./packages/api/dist/posts/
       Events:
         GetPostByIdApi:
           Type: Api
@@ -46,7 +46,7 @@ Resources:
       FunctionName: CreatePostFunction
       Runtime: nodejs8.10
       Handler: create.handler
-      CodeUri: ./packages/api/posts/
+      CodeUri: ./packages/api/dist/posts/
       Events:
         CreatePostApi:
           Type: Api

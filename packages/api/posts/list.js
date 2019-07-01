@@ -1,18 +1,22 @@
 'use strict';
 
-// const requestPromise = require('request-promise');
+const axios = require('axios');
+const options = {
+  method: 'get',
+  baseURL: 'https://jsonplaceholder.typicode.com',
+  url: '/posts',
+};
 
-exports.handler = async () => {
+
+exports.handler = async (event, context) => {
   try {
-    // const body = await requestPromise('http://https://jsonplaceholder.typicode.com/posts');
+    const {
+      data,
+      status
+    } = await axios(options);
     return {
-      statusCode: 200,
-      body: JSON.stringify({
-        userId: 1,
-        id: 1,
-        title: 'The title',
-        body: 'This is body',
-      })
+      statusCode: status,
+      body: JSON.stringify(data),
     }
   } catch (error) {
     return {

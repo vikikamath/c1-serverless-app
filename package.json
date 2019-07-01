@@ -1,6 +1,9 @@
 {
   "name": "serverless-js-app",
   "private": true,
+  "scripts": {
+    "local-api": "sam local start-api -t app.yaml"
+  },
   "devDependencies": {
     "lerna": "^3.15.0"
   },
