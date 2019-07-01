@@ -1,15 +1,19 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import HelloWorld from '@/components/HelloWorld';
+import CreatePost from '@/views/CreatePost';
+import ViewPost from '@/views/ViewPost';
 
 Vue.use(Router);
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld,
-    },
-  ],
+  mode: 'history',
+  routes: [{
+    path: '/',
+    name: 'ViewPost',
+    component: ViewPost,
+  }, {
+    path: '/post-new',
+    name: CreatePost,
+    component: CreatePost,
+  }],
 });
