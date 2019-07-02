@@ -1,59 +1,63 @@
-AWSTemplateFormatVersion : "2010-09-09"
+AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Posts Rest API Service
+Description: An AWS CloudFormation stack to run a serverless static webpage with API gateway backend
+
+Parameters:
+  webBucket:
+    Description: Bucket to store static files for SPA
+    Type: String
+    Default: "c1-serverless-app"
+
 
 Resources:
-  PostsApiGateway: 
-    Type: AWS::Serverless::Api
+  #
+  # Web Bucket
+  #
+  WebBucket:
+    Type: AWS::S3::Bucket
     Properties:
-      StageName: Prod
-      DefinitionUri: ./packages/api/swagger.yaml
-  GetPostsFunction:
-    Type: AWS::Serverless::Function
+      BucketName: !Ref webBucket
+  WebBucketPolicy:
+    Type: AWS::S3::BucketPolicy
     Properties:
-      FunctionName: GetPostsFunction
-      Runtime: nodejs8.10
-      Handler: list.handler
-      CodeUri: ./packages/api/dist/posts/
-      Events:
-        GetPostsApi:
-          Type: Api
-          Properties:
-            RestApiId: !Ref "PostsApiGateway"
-            Path: /posts
-            Method: GET
-      Policies:
-        - AWSLambdaBasicExecutionRole
-  GetPostByIdFunction:
-    Type: AWS::Serverless::Function
+      Bucket: !Ref WebBucket
+      PolicyDocument:
+        Statement:
+          - Sid: "Grant Read Access to Cloudfront"
+            Action:
+              - "s3:GetObject"
+            Effect: Allow
+            Resource: !Sub "${WebBucket.Arn}/*"
+            Principal:
+              CanonicalUser:
+                Fn::GetAtt: [ CloudFrontOriginIdentity , S3CanonicalUserId ]
+  
+  #
+  # CloudFront
+  #
+  CloudFrontOriginIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
-      FunctionName: GetPostByIdFunction
-      Runtime: nodejs8.10
-      Handler: byId.handler
-      CodeUri: ./packages/api/dist/posts/
-      Events:
-        GetPostByIdApi:
-          Type: Api
-          Properties:
-            RestApiId: !Ref "PostsApiGateway"
-            Path: /posts/{postId}
-            Method: GET
-      Policies:
-        - AWSLambdaBasicExecutionRole
-  CreatePostFunction:
-    Type: AWS::Serverless::Function
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: "origin identity"
+  
+  StaticCDN:
+    Type: AWS::CloudFront::Distribution
     Properties:
-      FunctionName: CreatePostFunction
-      Runtime: nodejs8.10
-      Handler: create.handler
-      CodeUri: ./packages/api/dist/posts/
-      Events:
-        CreatePostApi:
-          Type: Api
-          Properties:
-            RestApiId: !Ref "PostsApiGateway"
-            Path: /posts
-            Method: POST
-      Policies:
-        - AWSLambdaBasicExecutionRole
+      DistributionConfig:
+        Comment: Cloudfront Distribution pointing to S3 Bucket
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          ForwardedValues:
+            QueryString: true
+          TargetOriginId: vue-app
+          ViewerProtocolPolicy: redirect-to-https
+        Enabled: true
+        Origins:
+          - DomainName: !Sub "${WebBucket}.s3.amazonaws.com"
+            Id: vue-app
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginIdentity}"
 

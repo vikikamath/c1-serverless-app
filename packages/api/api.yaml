@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion : "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Posts Rest API Service
+
+Resources:
+  PostsApiGateway: 
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      DefinitionUri: ./swagger.yaml
+  GetPostsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetPostsFunction
+      Runtime: nodejs8.10
+      Handler: list.handler
+      CodeUri: ./dist/posts/
+      Events:
+        GetPostsApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref "PostsApiGateway"
+            Path: /posts
+            Method: GET
+      Policies:
+        - AWSLambdaBasicExecutionRole
+  GetPostByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetPostByIdFunction
+      Runtime: nodejs8.10
+      Handler: byId.handler
+      CodeUri: ./dist/posts/
+      Events:
+        GetPostByIdApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref "PostsApiGateway"
+            Path: /posts/{postId}
+            Method: GET
+      Policies:
+        - AWSLambdaBasicExecutionRole
+  CreatePostFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CreatePostFunction
+      Runtime: nodejs8.10
+      Handler: create.handler
+      CodeUri: ./dist/posts/
+      Events:
+        CreatePostApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref "PostsApiGateway"
+            Path: /posts
+            Method: POST
+      Policies:
+        - AWSLambdaBasicExecutionRole
+
