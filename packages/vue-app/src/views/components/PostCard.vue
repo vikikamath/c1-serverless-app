@@ -11,15 +11,15 @@
 <script>
 export default {
   computed: {
-    subTitle: function() {
+    subTitle() {
       return `This post was authored by: ${this.post.userId}`;
     },
-    dateStr: function() {
-      const then = Math.abs(Math.random() * Date.now() - 10000);
+    dateStr() {
+      const then = Math.abs(Math.random() * Date.now() - 10000); // eslint-disable-line
       return new Date(then).toDateString();
-    }
+    },
   },
-  props: ["post"]
+  props: ['post'],
 };
 </script>
 

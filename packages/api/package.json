@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha tests/unit/",
-    "local": "webpack && sam local start-api -t api.yaml",
+    "dev": "NODE_ENV=development webpack && sam local start-api -t api.yaml",
     "build": "webpack --mode=production"
   },
   "keywords": [],

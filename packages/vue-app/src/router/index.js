@@ -13,7 +13,7 @@ export default new Router({
     component: ViewPost,
   }, {
     path: '/post-new',
-    name: CreatePost,
+    name: 'CreatePost',
     component: CreatePost,
   }],
 });

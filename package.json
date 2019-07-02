@@ -1,7 +1,8 @@
 {
-  "name": "serverless-js-app",
+  "name": "c1-serverless-app",
   "private": true,
   "scripts": {
+    "dev": "lerna run dev --parallel",
     "package": "sam validate -t app.yaml && sam package --template-file app.yaml --s3-bucket \"c1-serverless-app\" --output-template-file packaged.yaml --debug",
     "deploy": "yarn package && sam deploy --template-file packaged.yaml --stack-name c1-serverless-app --capabilities CAPABILITY_IAM --debug"
   },
