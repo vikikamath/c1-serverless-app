@@ -1,0 +1,69 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: An AWS CloudFormation stack to run a serverless static webpage with API gateway backend
+
+Parameters:
+  BucketName:
+    Type: String
+    Default: c1-serverless-app
+
+Resources:
+  # The S3 Bucket for Web App
+  WebBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+
+  # Policy to make WebBucket read-only by Cloudfront
+  WebBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WebBucket
+      PolicyDocument:
+        Statement:
+          - Sid: "Grant Read Access to Cloudfront"
+            Action:
+              - "s3:GetObject"
+            Effect: Allow
+            Resource: !Sub "${WebBucket.Arn}/*"
+            Principal:
+              CanonicalUser: !GetAtt CloudFrontOriginIdentity.S3CanonicalUserId
+
+  # CloudFront Identity
+  CloudFrontOriginIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: "origin identity"
+
+  # CloudFront
+  StaticCDN:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: Cloudfront Distribution pointing to WebBucket
+        DefaultRootObject: index.html
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          ForwardedValues:
+            QueryString: true
+          TargetOriginId: vue-app
+          ViewerProtocolPolicy: redirect-to-https
+        Enabled: true
+        Origins:
+          - DomainName: !Sub "${WebBucket}.s3.amazonaws.com"
+            Id: vue-app
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginIdentity}"
+
+Outputs:
+  Domain:
+    Description: Cloudfront Domain
+    Value: !GetAtt StaticCDN.DomainName
+
+  DistributionId:
+    Description: Unique Cloudfront Distribution ID
+    Value: !Ref StaticCDN
+

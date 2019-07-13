@@ -1,12 +1,18 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "description": "",
+  "description": "API provided by AWS API Gateway and AWS Lambda",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests/unit/",
-    "dev": "NODE_ENV=development webpack && sam local start-api -t api.yaml",
-    "build": "webpack --mode=production"
+    "serve": "webpack --mode=development && sam local start-api -t api.yaml",
+    "build": "webpack --mode=production",
+    "lint": "echo \"No linting hook provided\"",
+    "unit": "mocha **/*.spec.js",
+    "functional": "echo \"No functional testing hook provided\"",
+    "test": "yarn unit && yarn functional",
+    "package": "yarn build && sam validate -t api.yaml && sam package --template-file api.yaml --s3-bucket \"c1-serverless-app\" --output-template-file api.packaged.yaml --debug",
+    "sync": "yarn package && aws s3 sync dist s3://c1-serverless-app",
+    "deploy": "sam deploy --template-file api.packaged.yaml --stack-name \"c1-serverless-app\" --capabilities CAPABILITY_IAM --debug"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +23,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.0.3",
     "glob": "^7.1.4",
     "mocha": "^6.1.4",
     "webpack": "^4.35.0",

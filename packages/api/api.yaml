@@ -1,59 +1,91 @@
-AWSTemplateFormatVersion : "2010-09-09"
+AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Posts Rest API Service
+Description: Simple API Endpoint configured using Swagger specified inline and backed by a Lambda function
 
 Resources:
-  PostsApiGateway: 
+  UserPostsApiGateway:
     Type: AWS::Serverless::Api
     Properties:
-      StageName: Prod
-      DefinitionUri: ./swagger.yaml
-  GetPostsFunction:
+        StageName: prod
+        DefinitionBody:
+            swagger: 2.0
+            info:
+              title:
+                Ref: AWS::StackName
+            paths:
+              "/posts":
+                get:
+                  summary: List all Posts by all users
+                  x-amazon-apigateway-integration:
+                    httpMethod: POST
+                    type: aws_proxy
+                    uri:
+                      Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ListPosts.Arn}/invocations
+                  responses: {}
+                post:
+                  summary: Create a User Post
+                  x-amazon-apigateway-integration:
+                    httpMethod: POST
+                    type: aws_proxy
+                    uri:
+                      Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CreatePost.Arn}/invocations
+                  responses: {}
+              "/posts/{postId}":
+                get:
+                  summary: Show Post by Post Id
+                  x-amazon-apigateway-integration:
+                    httpMethod: POST
+                    type: aws_proxy
+                    uri:
+                      Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ShowPostById.Arn}/invocations
+                  responses: {}
+  # 
+  # API definitions
+  # 
+  ListPosts:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: GetPostsFunction
-      Runtime: nodejs8.10
       Handler: list.handler
-      CodeUri: ./dist/posts/
+      Runtime: nodejs8.10
+      CodeUri: ./dist/posts
       Events:
-        GetPostsApi:
+        ListPostsApi:
           Type: Api
           Properties:
-            RestApiId: !Ref "PostsApiGateway"
-            Path: /posts
+            Path: /get
             Method: GET
-      Policies:
-        - AWSLambdaBasicExecutionRole
-  GetPostByIdFunction:
+            RestApiId: !Ref UserPostsApiGateway
+
+  CreatePost:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: GetPostByIdFunction
-      Runtime: nodejs8.10
-      Handler: byId.handler
-      CodeUri: ./dist/posts/
-      Events:
-        GetPostByIdApi:
-          Type: Api
-          Properties:
-            RestApiId: !Ref "PostsApiGateway"
-            Path: /posts/{postId}
-            Method: GET
-      Policies:
-        - AWSLambdaBasicExecutionRole
-  CreatePostFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: CreatePostFunction
-      Runtime: nodejs8.10
       Handler: create.handler
-      CodeUri: ./dist/posts/
+      Runtime: nodejs8.10
+      CodeUri: ./dist/posts
       Events:
         CreatePostApi:
           Type: Api
           Properties:
-            RestApiId: !Ref "PostsApiGateway"
             Path: /posts
             Method: POST
-      Policies:
-        - AWSLambdaBasicExecutionRole
+            RestApiId: !Ref UserPostsApiGateway
+            
+  ShowPostById:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: byId.handler
+      Runtime: nodejs8.10
+      CodeUri: ./dist/posts
+      Events:
+        CreatePostApi:
+          Type: Api
+          Properties:
+            Path: /posts/{postId}
+            Method: GET
+            RestApiId: !Ref UserPostsApiGateway
 
+Outputs:
+
+    ApiURL:
+      Description: "API endpoint URL for Prod environment"
+      Value: !Sub "https://${UserPostsApiGateway}.execute-api.${AWS::Region}.amazonaws.com/prod/get"

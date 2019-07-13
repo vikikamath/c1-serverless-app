@@ -1,63 +1,21 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion : "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: An AWS CloudFormation stack to run a serverless static webpage with API gateway backend
-
-Parameters:
-  webBucket:
-    Description: Bucket to store static files for SPA
-    Type: String
-    Default: "c1-serverless-app"
-
+Description: Bootstrap Full Stack App consisting of a Vue App Deployed to S3 Bucket with CloudFront Distribution and a RESTful API Gateway with Lambda functions
 
 Resources:
-  #
-  # Web Bucket
-  #
-  WebBucket:
-    Type: AWS::S3::Bucket
+  VueApp:
+    Type: AWS::Serverless::Application
     Properties:
-      BucketName: !Ref webBucket
-  WebBucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref WebBucket
-      PolicyDocument:
-        Statement:
-          - Sid: "Grant Read Access to Cloudfront"
-            Action:
-              - "s3:GetObject"
-            Effect: Allow
-            Resource: !Sub "${WebBucket.Arn}/*"
-            Principal:
-              CanonicalUser:
-                Fn::GetAtt: [ CloudFrontOriginIdentity , S3CanonicalUserId ]
-  
-  #
-  # CloudFront
-  #
-  CloudFrontOriginIdentity:
-    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
-    Properties:
-      CloudFrontOriginAccessIdentityConfig:
-        Comment: "origin identity"
-  
-  StaticCDN:
-    Type: AWS::CloudFront::Distribution
-    Properties:
-      DistributionConfig:
-        Comment: Cloudfront Distribution pointing to S3 Bucket
-        DefaultCacheBehavior:
-          AllowedMethods:
-            - GET
-            - HEAD
-          ForwardedValues:
-            QueryString: true
-          TargetOriginId: vue-app
-          ViewerProtocolPolicy: redirect-to-https
-        Enabled: true
-        Origins:
-          - DomainName: !Sub "${WebBucket}.s3.amazonaws.com"
-            Id: vue-app
-            S3OriginConfig:
-              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginIdentity}"
+      Location: ./packages/vue-app/ui.yaml
+      Parameters:
+        Param1: hello
+        Param2: world
 
+  RestfulAPI:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: ./packages/api/api.yaml
+      Parameters:
+        Param1: hola
+        Param2: mundo
+  

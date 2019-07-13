@@ -1,12 +1,11 @@
 module.exports = {
-  publicPath: '/app/',
   devServer: {
     proxy: {
-      '/api/**': {
+      '/api/*': {
         changeOrigin: true,
         target: 'http://localhost:3000',
-        rewrite: (req) => {
-          req.url.replace(/^\/api/, '');
+        pathRewrite: {
+          '/api': '',
         },
         logLevel: 'debug',
       },
