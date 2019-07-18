@@ -32,7 +32,8 @@ module.exports = {
     new CleanWebpackPlugin(),
     /**
      * TODO: There are issues with standalone swagger file: https://github.com/awslabs/serverless-application-model/issues/305
-     * Until then don't copy
+     * 
+     * TODO: Check if https://github.com/awslabs/serverless-application-model/blob/master/examples/2016-10-31/api_swagger_cors/template.yaml works for standalone swagger.yaml
      */
     // new CopyPlugin([{
     //   from: `${pathPrefix}/swagger.yaml`,
