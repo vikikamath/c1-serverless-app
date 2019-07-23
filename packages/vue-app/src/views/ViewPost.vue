@@ -6,13 +6,14 @@
     </div>
     <div
       v-if="error"
-      id="view-posts-error"
+      id="notification"
       class="alert alert-warning alert-dismissible fade show"
       role="alert"
+      @click="onClose"
     >
       <strong>Whoops!</strong>
       {{ error }}
-      <button type="button" class="close" @click="onClose" aria-label="Close">
+      <button type="button" class="close" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
@@ -40,7 +41,7 @@ export default {
       try {
         const { data } = await axios({
           method: "get",
-          url: "/api/posts"
+          url: "/posts"
         });
         this.posts = data;
         this.saveData();
@@ -70,8 +71,9 @@ export default {
         console.error("Error saving ", err);
       }
     },
-    onClose: () =>
-      document.querySelector("view-posts-error.alert").alert("close")
+    onClose() {
+      this.error = "";
+    }
   },
   data() {
     return {
