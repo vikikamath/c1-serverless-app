@@ -1,12 +1,12 @@
 {
-  "name": "c1-serverless-app",
+  "name": "@sam-app/c1-serverless-app",
   "private": true,
   "scripts": {
     "serve": "lerna run serve --parallel",
     "test": "lerna run test --parallel",
-    "build": "lerna run build --parallel && ",
-    "package": "lerna run package --parallel && sam validate -t app.yaml && sam package --template-file app.yaml --s3-bucket \"c1-serverless-app\" --output-template-file app.packaged.yaml --debug",
-    "deploy": "yarn package && sam deploy --template-file packaged.yaml --stack-name c1-serverless-app --capabilities CAPABILITY_IAM --debug"
+    "build": "lerna run build --parallel",
+    "validate": "lerna run validate --parallel",
+    "package": "lerna run package --parallel -- --debug"
   },
   "devDependencies": {
     "lerna": "^3.15.0"

@@ -1,5 +1,5 @@
 {
-  "name": "vue-app",
+  "name": "@sam-app/vue-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -21,6 +21,7 @@
     "vue-router": "^3.0.7"
   },
   "devDependencies": {
+    "@sam-app/api": "*",
     "@vue/cli-plugin-babel": "^3.9.0",
     "@vue/cli-plugin-eslint": "^3.9.0",
     "@vue/cli-service": "^3.9.0",

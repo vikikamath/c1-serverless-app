@@ -1,6 +1,6 @@
 {
-  "name": "api",
-  "version": "1.0.0",
+  "name": "@sam-app/api",
+  "version": "0.0.1",
   "description": "API provided by AWS API Gateway and AWS Lambda",
   "main": "index.js",
   "scripts": {
