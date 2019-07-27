@@ -19,7 +19,7 @@ before_install:
   - python get-pip.py
   - pip install -U pip
   - pip install awscli
-  - pip install sam-cli
+  - pip install aws-sam-cli
   - aws --version
   - sam --version
 
