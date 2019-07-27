@@ -1,0 +1,49 @@
+# OS specific
+sudo: false
+dist: trusty
+addons:
+  apt:
+    packages:
+      - python3
+      - 'python3-pip'
+
+
+language: node_js
+node_js:
+  - stable
+cache: yarn
+
+
+branches:
+  only:
+  - master
+  - development
+
+
+before_install:
+  - pip install awscli
+  - pip install sam-cli
+  - aws --version
+  - sam --version
+
+install:
+  - yarn
+  - lerna bootstrap
+
+script:
+  - yarn build
+  - yarn validate
+  - yarn package
+
+after_success:
+  - echo "Build success"
+after_failure:
+  - echo "Build failed"
+
+deploy:
+  - provider: script
+    script: yarn deploy
+    on:
+      branch: master
+
+
