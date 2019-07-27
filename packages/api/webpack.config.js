@@ -8,12 +8,10 @@ const {
 // const CopyPlugin = require('copy-webpack-plugin');
 
 const pathPrefix = path.resolve(__dirname);
-const entriesArr = glob.sync(`${pathPrefix}/**/*.js`, {
-  ignore: ['**/dist/**', '**/node_modules/**', '**/*.config.js'],
-});
+const entriesArr = glob.sync(`${pathPrefix}/src/routes/**/*.js`);
 
 const entriesMap = entriesArr.reduce((_map, entry) => {
-  _map[entry.replace(pathPrefix, '').replace('.js', '')] = entry;
+  _map[entry.replace(`${pathPrefix}/src/routes`, '').replace('.js', '')] = entry;
   return _map;
 }, {});
 

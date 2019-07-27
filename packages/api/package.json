@@ -10,9 +10,10 @@
     "unit": "mocha **/*.spec.js",
     "functional": "echo \"No functional testing hook provided\"",
     "test": "yarn unit && yarn functional",
-    "package": "yarn build && sam validate -t api.yaml && sam package --template-file api.yaml --s3-bucket \"c1-serverless-app\" --output-template-file api.packaged.yaml --debug",
-    "sync": "yarn package && aws s3 sync dist s3://c1-serverless-app",
-    "deploy": "sam deploy --template-file api.packaged.yaml --stack-name \"c1-serverless-app\" --capabilities CAPABILITY_IAM --debug"
+    "validate": "sam validate -t api.yaml",
+    "package": "sam package --template-file api.yaml --s3-bucket c1-serverless-app-deploy --output-template-file api.packaged.yaml --debug",
+    "sync": "yarn build && aws s3 sync dist s3://c1-serverless-app",
+    "deploy": "sam deploy --template-file api.packaged.yaml --stack-name \"c1-serverless-api\" --capabilities CAPABILITY_IAM --debug"
   },
   "keywords": [],
   "author": "",

@@ -6,7 +6,8 @@
     "test": "lerna run test --parallel",
     "build": "lerna run build --parallel",
     "validate": "lerna run validate --parallel",
-    "package": "lerna run package --parallel -- --debug"
+    "package": "lerna run package",
+    "deploy": "lerna run deploy --sort"
   },
   "devDependencies": {
     "lerna": "^3.15.0"

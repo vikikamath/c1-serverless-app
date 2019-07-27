@@ -9,8 +9,9 @@
     "unit": "jest",
     "e2e": "echo \"No e2e configured\"",
     "test": "yarn unit && yarn e2e",
-    "package": "sam validate -t ui.yaml && sam package --template-file ui.yaml --s3-bucket \"c1-serverless-app\" --output-template-file ui.packaged.yaml --debug",
-    "sync": "yarn build && aws s3 sync dist s3://c1-serverless-app",
+    "validate": "sam validate -t ui.yaml",
+    "package": "sam package --template-file ui.yaml --s3-bucket c1-serverless-app-deploy --output-template-file ui.packaged.yaml --debug",
+    "sync": "VUE_APP_API_URL=`aws cloudformation describe-stacks --stack-name c1-serverless-api --query 'Stacks[0].Outputs[0].OutputValue'` yarn build && aws s3 sync dist s3://c1-serverless-app",
     "deploy": "sam deploy --template-file ui.packaged.yaml --stack-name c1-serverless-ui"
   },
   "dependencies": {

@@ -52,7 +52,7 @@ Resources:
         ListPostsApi:
           Type: Api
           Properties:
-            Path: /get
+            Path: /posts
             Method: GET
             RestApiId: !Ref UserPostsApiGateway
 
@@ -86,6 +86,6 @@ Resources:
 
 Outputs:
 
-    ApiURL:
-      Description: "API endpoint URL for Prod environment"
-      Value: !Sub "https://${UserPostsApiGateway}.execute-api.${AWS::Region}.amazonaws.com/prod/get"
+  ApiURL:
+    Description: "API endpoint URL"
+    Value: !Sub "https://${UserPostsApiGateway}.execute-api.${AWS::Region}.amazonaws.com/prod"
