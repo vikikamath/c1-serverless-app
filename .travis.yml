@@ -5,7 +5,7 @@ python: '2.7'
 addons:
   apt:
     packages:
-      - 'python-pip'
+      - brew
 language: node_js
 node_js:
   - 'lts/dubnium'
@@ -19,29 +19,32 @@ branches:
 
 
 before_install:
-  - pip install awscli --user
-  - pip install aws-sam-cli --user
+#   - pip install awscli --user
+#   - pip install aws-sam-cli --user
+  - brew install awscli
+  - brew tap aws/tap
+  - brew install aws-sam-cli
   - aws --version
   - sam --version
 
-install:
-  - yarn
-  - lerna bootstrap
+# install:
+#   - yarn
+#   - lerna bootstrap
 
-script:
-  - yarn build
-  - yarn validate
-  - yarn package
+# script:
+#   - yarn build
+#   - yarn validate
+#   - yarn package
 
-after_success:
-  - echo "Build success"
-after_failure:
-  - echo "Build failed"
+# after_success:
+#   - echo "Build success"
+# after_failure:
+#   - echo "Build failed"
 
-deploy:
-  - provider: script
-    script: yarn deploy
-    on:
-      branch: master
+# deploy:
+#   - provider: script
+#     script: yarn deploy
+#     on:
+#       branch: master
 
 
