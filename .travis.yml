@@ -19,9 +19,12 @@ branches:
 
 
 before_install:
-#   - pip install awscli --user
-#   - pip install aws-sam-cli --user
-  - sh ./brew-install.sh
+  - git clone https://github.com/Linuxbrew/brew.git $HOME/.linuxbrew
+  - PATH="$HOME/.linuxbrew/bin:$PATH"
+  - echo 'export PATH="$HOME/.linuxbrew/bin:$PATH"' >>~/.bash_profile
+  - export MANPATH="$(brew --prefix)/share/man:$MANPATH"
+  - export INFOPATH="$(brew --prefix)/share/info:$INFOPATH"
+  - brew --version
   - brew tap aws/tap
   - brew install aws-sam-cli
   - aws --version
