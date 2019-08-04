@@ -1,7 +1,6 @@
 # OS specific
 sudo: false
 dist: trusty
-python: '2.7'
 addons:
   apt:
     packages:
