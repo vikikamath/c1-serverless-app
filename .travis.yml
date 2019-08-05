@@ -28,19 +28,19 @@ before_install:
   - aws --version
   - sam --version
 
-# install:
-#   - yarn
-#   - lerna bootstrap
+install:
+  - yarn
+  - lerna bootstrap
 
-# script:
-#   - yarn build
-#   - yarn validate
-#   - yarn package
+script:
+  - yarn build
+  - yarn validate
+  - yarn package
 
-# after_success:
-#   - echo "Build success"
-# after_failure:
-#   - echo "Build failed"
+after_success:
+  - echo "Build success"
+after_failure:
+  - echo "Build failed"
 
 # deploy:
 #   - provider: script
