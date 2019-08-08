@@ -1,13 +1,22 @@
 sudo: false
 dist: trusty
 python: "3.6"
-cache:
-  yarn: true
-  pip: true
+
+addons:
+  apt:
+    packages:
+      - pip
+
 
 language: node_js
 node_js:
   - 'lts/dubnium'
+
+
+cache:
+  yarn: true
+  pip: true
+  apt: true
 
 env:
   - S3_DEPLOY_BUCKET="c1-serverless-app-deploy"
