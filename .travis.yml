@@ -1,11 +1,11 @@
 sudo: false
-dist: trusty
-python: "3.6"
+dist: xenial
 
 addons:
   apt:
-    packages:
-      - pip
+    sources:
+      - ppa:deadsnakes/ppa
+
 
 
 language: node_js
@@ -28,7 +28,7 @@ branches:
 
 
 before_install:
-  - python3 -m pip install --user --upgrade pip
+  - curl https://bootstrap.pypa.io/get-pip.py | python3.6 --user
   - pip install --user aws-cli
   - pip install --user aws-sam-cli
 
@@ -42,7 +42,9 @@ script:
 
 deploy:
   - provider: script
-    script: yarn deploy
+    script:
+      - yarn deploy
+      - yarn sync
     on:
       branch: development
 
