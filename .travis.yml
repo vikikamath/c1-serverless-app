@@ -3,7 +3,10 @@ dist: xenial
 
 addons:
   apt:
+    sources:
+      - ppa:deadsnakes/ppa
     install:
+      - python3.6
       - python3-pip
 
 
