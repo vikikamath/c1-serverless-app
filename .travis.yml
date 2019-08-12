@@ -1,12 +1,13 @@
 sudo: false
 dist: xenial
+python:
+  - 3.7
 
 addons:
   apt:
     sources:
       - ppa:deadsnakes/ppa
     install:
-      - python3.6
       - python3-pip
 
 
@@ -31,6 +32,7 @@ branches:
 
 
 before_install:
+  - pip3 install --upgrade pip
   - pip install --user aws-cli
   - pip install --user aws-sam-cli
 
