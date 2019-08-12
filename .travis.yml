@@ -1,11 +1,10 @@
 sudo: false
 dist: xenial
-python:
-  - 3.6.7
 
 addons:
   apt:
     install:
+      - python3
       - pip3
 
 
