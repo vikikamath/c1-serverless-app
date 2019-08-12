@@ -31,6 +31,7 @@ branches:
 
 
 before_install:
+  - pip install --upgrade pip
   - pip install --user aws-cli
   - pip install --user aws-sam-cli
 
