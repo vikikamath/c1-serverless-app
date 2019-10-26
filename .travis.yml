@@ -29,9 +29,7 @@ branches:
 
 before_install:
   - brew install awscli
-  - which aws-cli
   - brew install aws-sam-cli
-  - which aws-sam-cli
 
 # install:
 #   - yarn install
