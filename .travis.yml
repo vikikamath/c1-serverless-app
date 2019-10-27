@@ -16,7 +16,6 @@ node_js:
 cache:
   directories:
     - $HOME/Library/Caches/Homebrew
-  yarn: true
 
 env:
   - S3_DEPLOY_BUCKET="c1-serverless-app-deploy"
@@ -29,10 +28,11 @@ branches:
 before_install:
   - brew install awscli
   - brew install aws-sam-cli
+  - brew install yarn
+  - yarn add -g lerna
 
-install:
-  - yarn install
-  - lerna bootstrap
+
+install: lerna bootstrap
 
 script:
   - yarn build
