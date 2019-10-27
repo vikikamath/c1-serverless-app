@@ -40,6 +40,7 @@ deploy:
       - yarn deploy
       - yarn sync
     on:
-      branch: development
+      tags: true
+      all_branches: true
 
 
