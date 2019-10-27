@@ -23,7 +23,6 @@ env:
 
 branches:
   only:
-  - master
   - development
 
 
@@ -31,20 +30,20 @@ before_install:
   - brew install awscli
   - brew install aws-sam-cli
 
-# install:
-#   - yarn install
-#   - lerna bootstrap
+install:
+  - yarn install
+  - lerna bootstrap
 
-# script:
-#   - yarn build
-#   - yarn package
+script:
+  - yarn build
+  - yarn package
 
-# deploy:
-#   - provider: script
-#     script:
-#       - yarn deploy
-#       - yarn sync
-#     on:
-#       branch: development
+deploy:
+  - provider: script
+    script:
+      - yarn deploy
+      - yarn sync
+    on:
+      branch: development
 
 
