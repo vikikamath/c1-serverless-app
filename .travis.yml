@@ -20,10 +20,6 @@ cache:
 env:
   - S3_DEPLOY_BUCKET="c1-serverless-app-deploy"
 
-branches:
-  only:
-  - development
-
 
 before_install:
   - brew install awscli
