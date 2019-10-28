@@ -35,7 +35,7 @@ script:
   - yarn package
 
 after_success:
-  - yarn deploy
+  - travis_wait yarn deploy
   - yarn sync
 
 
