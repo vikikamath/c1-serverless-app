@@ -34,13 +34,10 @@ script:
   - yarn build
   - yarn package
 
-deploy:
-  - provider: script
-    script:
-      - yarn deploy
-      - yarn sync
-    on:
-      all_branches: true
+after_success:
+  - yarn deploy
+  - yarn sync
+
 
 
 
