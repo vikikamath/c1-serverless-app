@@ -6,6 +6,7 @@
     "test": "lerna run test --parallel",
     "build": "lerna run build --parallel",
     "validate": "lerna run validate --parallel",
+    "sync": "lerna run sync",
     "package": "lerna run package",
     "deploy": "lerna run deploy --sort"
   },

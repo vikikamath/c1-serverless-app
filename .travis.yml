@@ -1,0 +1,43 @@
+sudo: false
+language: node_js
+os: osx
+
+addons:
+  homebrew:
+    update: true
+    packages: 
+      - awscli
+    taps: aws/tap
+
+node_js:
+  - 'lts/dubnium'
+
+
+cache:
+  directories:
+    - $HOME/Library/Caches/Homebrew
+
+env:
+  - S3_DEPLOY_BUCKET="c1-serverless-app-deploy"
+
+
+before_install:
+  - brew install awscli
+  - brew install aws-sam-cli
+  - brew install yarn
+  - yarn global add lerna
+
+
+install: lerna bootstrap
+
+script:
+  - yarn build
+  - yarn package
+
+after_success:
+  - travis_wait yarn deploy
+  - yarn sync
+
+
+
+
